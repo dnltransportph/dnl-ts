@@ -2,7 +2,7 @@ import { BarChart, Sparkline } from '@mantine/charts'
 import { Group, Paper, SimpleGrid, Stack, Table, Text, Title } from '@mantine/core'
 import type { PLResult } from '@/types/database'
 import { useCurrencyBarChartLayout } from '@/hooks/useCurrencyBarChartLayout'
-import { formatCurrency, formatPercent } from '@/lib/format'
+import { formatCurrency, formatExpenseCurrency, formatPercent } from '@/lib/format'
 import { totalRowStyle, twoColumnGridProps } from '@/components/layout/contentLayout'
 
 function expenseSparklineData(value: number): number[] {
@@ -64,9 +64,10 @@ export function PLSummaryPanel({ pl }: PLSummaryPanelProps) {
               {rows.map((row) => (
                 <Table.Tr key={row.label}>
                   <Table.Td fw={500}>{row.label}</Table.Td>
-                  <Table.Td ta="right" c={row.type === 'expense' ? 'red.7' : 'green.7'}>
-                    {row.type === 'expense' ? '−' : ''}
-                    {formatCurrency(row.value)}
+                  <Table.Td ta="right" c={row.type === 'expense' ? 'red.7' : 'green.7'} style={{ whiteSpace: 'nowrap' }}>
+                    {row.type === 'expense'
+                      ? formatExpenseCurrency(row.value)
+                      : formatCurrency(row.value)}
                   </Table.Td>
                   <Table.Td ta="right" c="dimmed">
                     {row.ratio != null ? formatPercent(row.ratio) : '—'}
@@ -75,7 +76,7 @@ export function PLSummaryPanel({ pl }: PLSummaryPanelProps) {
               ))}
               <Table.Tr style={totalRowStyle}>
                 <Table.Td c="brand.9">Net P&L</Table.Td>
-                <Table.Td ta="right" c={pl.net >= 0 ? 'green.7' : 'red.7'}>
+                <Table.Td ta="right" c={pl.net >= 0 ? 'green.7' : 'red.7'} style={{ whiteSpace: 'nowrap' }}>
                   {formatCurrency(pl.net)}
                 </Table.Td>
                 <Table.Td />

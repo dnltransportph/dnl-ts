@@ -5,7 +5,7 @@ import { ReportChartSection } from '@/components/dashboard/ReportChartSection'
 import { useCurrencyBarChartLayout } from '@/hooks/useCurrencyBarChartLayout'
 import { insetDividerTop, totalRowStyle } from '@/components/layout/contentLayout'
 import { computeTruckReportTotals } from '@/lib/reports'
-import { formatCurrency, formatPercent } from '@/lib/format'
+import { formatCurrency, formatExpenseCurrency, formatPercent } from '@/lib/format'
 import type { CategoryBreakdownRow, TruckReportRow } from '@/types/database'
 
 type ReportTab = 'trucks' | 'categories'
@@ -132,6 +132,8 @@ function CategoryTable({ rows }: { rows: CategoryBreakdownRow[] }) {
   )
 }
 
+const currencyCellProps = { ta: 'right' as const, style: { whiteSpace: 'nowrap' as const } }
+
 export function DashboardReportsPanel({
   truckReport,
   categoryBreakdown,
@@ -194,23 +196,23 @@ export function DashboardReportsPanel({
           {truckReport.map((row) => (
             <Table.Tr key={row.plateCode}>
               <Table.Td fw={500}>{row.plateCode}</Table.Td>
-              <Table.Td ta="right" c="green.7">
+              <Table.Td {...currencyCellProps} c="green.7">
                 {formatCurrency(row.sales)}
               </Table.Td>
-              <Table.Td ta="right" c="green.7">
+              <Table.Td {...currencyCellProps} c="green.7">
                 {formatCurrency(row.toll)}
               </Table.Td>
-              <Table.Td ta="right" c="red.7">
-                −{formatCurrency(row.purchases)}
+              <Table.Td {...currencyCellProps} c="red.7">
+                {formatExpenseCurrency(row.purchases)}
               </Table.Td>
-              <Table.Td ta="right" c="red.7">
-                −{formatCurrency(row.diesel)}
+              <Table.Td {...currencyCellProps} c="red.7">
+                {formatExpenseCurrency(row.diesel)}
               </Table.Td>
-              <Table.Td ta="right" c="red.7">
-                −{formatCurrency(row.salary)}
+              <Table.Td {...currencyCellProps} c="red.7">
+                {formatExpenseCurrency(row.salary)}
               </Table.Td>
               <Table.Td
-                ta="right"
+                {...currencyCellProps}
                 fw={500}
                 c={row.net >= 0 ? 'green.7' : 'red.7'}
               >
@@ -221,22 +223,22 @@ export function DashboardReportsPanel({
           {truckReport.length > 0 && (
             <Table.Tr style={totalRowStyle}>
               <Table.Td>{truckTotals.plateCode}</Table.Td>
-              <Table.Td ta="right">
+              <Table.Td {...currencyCellProps}>
                 {formatCurrency(truckTotals.sales)}
               </Table.Td>
-              <Table.Td ta="right">
+              <Table.Td {...currencyCellProps}>
                 {formatCurrency(truckTotals.toll)}
               </Table.Td>
-              <Table.Td ta="right">
-                −{formatCurrency(truckTotals.purchases)}
+              <Table.Td {...currencyCellProps}>
+                {formatExpenseCurrency(truckTotals.purchases)}
               </Table.Td>
-              <Table.Td ta="right">
-                −{formatCurrency(truckTotals.diesel)}
+              <Table.Td {...currencyCellProps}>
+                {formatExpenseCurrency(truckTotals.diesel)}
               </Table.Td>
-              <Table.Td ta="right">
-                −{formatCurrency(truckTotals.salary)}
+              <Table.Td {...currencyCellProps}>
+                {formatExpenseCurrency(truckTotals.salary)}
               </Table.Td>
-              <Table.Td ta="right" c={truckTotals.net >= 0 ? 'green.7' : 'red.7'}>
+              <Table.Td {...currencyCellProps} c={truckTotals.net >= 0 ? 'green.7' : 'red.7'}>
                 {formatCurrency(truckTotals.net)}
               </Table.Td>
             </Table.Tr>

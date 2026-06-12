@@ -1,4 +1,5 @@
 import type { BarChartProps } from '@mantine/charts'
+import { CurrencyBarValueLabel } from '@/components/charts/CurrencyBarValueLabel'
 
 /** Reserve space for formatted PHP currency ticks on the x-axis. */
 const currencyAxisMargin = {
@@ -8,7 +9,7 @@ const currencyAxisMargin = {
   left: 4,
 } as const
 
-/** Extra room for bar-end value labels (e.g. ₱514,838.00) beside horizontal bars. */
+/** Extra room for positive bar-end value labels (e.g. ₱514,838.00). */
 const currencyValueLabelMargin = {
   ...currencyAxisMargin,
   right: 96,
@@ -27,7 +28,22 @@ const compactCurrencyValueLabelMargin = {
   right: 48,
 } as const
 
-type BarChartLayoutProps = Pick<BarChartProps, 'barChartProps' | 'xAxisProps' | 'valueLabelProps'>
+const currencyYAxisProps = {
+  width: 76,
+} as const
+
+const compactCurrencyYAxisProps = {
+  width: 68,
+} as const
+
+const currencyBarValueLabelProps = {
+  content: CurrencyBarValueLabel,
+} as const
+
+type BarChartLayoutProps = Pick<
+  BarChartProps,
+  'barChartProps' | 'xAxisProps' | 'yAxisProps' | 'valueLabelProps'
+>
 
 export const currencyBarChartLayout: BarChartLayoutProps = {
   barChartProps: { margin: currencyAxisMargin },
@@ -36,8 +52,9 @@ export const currencyBarChartLayout: BarChartLayoutProps = {
 
 export const currencyBarChartWithValueLabelLayout: BarChartLayoutProps = {
   barChartProps: { margin: currencyValueLabelMargin },
-  xAxisProps: { padding: { left: 0, right: 16 } },
-  valueLabelProps: { offset: 4 },
+  xAxisProps: { padding: { left: 8, right: 16 } },
+  yAxisProps: currencyYAxisProps,
+  valueLabelProps: currencyBarValueLabelProps,
 }
 
 export const compactCurrencyBarChartLayout: BarChartLayoutProps = {
@@ -47,6 +64,7 @@ export const compactCurrencyBarChartLayout: BarChartLayoutProps = {
 
 export const compactCurrencyBarChartWithValueLabelLayout: BarChartLayoutProps = {
   barChartProps: { margin: compactCurrencyValueLabelMargin },
-  xAxisProps: { padding: { left: 0, right: 8 } },
-  valueLabelProps: { offset: 2 },
+  xAxisProps: { padding: { left: 8, right: 8 } },
+  yAxisProps: compactCurrencyYAxisProps,
+  valueLabelProps: currencyBarValueLabelProps,
 }
