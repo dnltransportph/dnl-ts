@@ -9,6 +9,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* iOS Safari zooms focused inputs below 16px; keep zoom after navigation. */
+@media (hover: none) and (pointer: coarse) {
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
 /* CRM-style chart grid lines */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
