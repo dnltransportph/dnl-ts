@@ -304,7 +304,7 @@ export function ImportExportPage() {
             </Group>
 
             <Button onClick={handleImport} disabled={!canImport || importing}>
-              {importing ? 'Importing…' : 'Import into Supabase'}
+              {importing ? 'Importing…' : 'Import to Database'}
             </Button>
             {importMessage && (
               <Text
