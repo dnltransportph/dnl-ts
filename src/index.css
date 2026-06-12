@@ -1,12 +1,19 @@
 html {
   overflow-x: clip;
+  height: 100%;
 }
 
 body {
   margin: 0;
+  height: 100%;
+  overflow: hidden;
   background-color: var(--mantine-color-body);
   color: var(--mantine-color-text);
   -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  height: 100%;
 }
 
 /* iOS Safari zooms focused inputs below 16px; keep zoom after navigation. */

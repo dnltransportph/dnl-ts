@@ -229,7 +229,7 @@ export function AppLayout() {
   const contentOffset = isDesktopNav ? getSidebarWidth(sidebarCollapsed) : 0
 
   return (
-    <Box style={{ minHeight: '100vh' }}>
+    <Box style={{ height: '100dvh', maxHeight: '100dvh' }}>
       <SideNav
         collapsed={sidebarCollapsed}
         onToggleCollapsed={() => setSidebarCollapsed((v) => !v)}
@@ -268,16 +268,20 @@ export function AppLayout() {
         style={{
           marginLeft: contentOffset,
           minWidth: 0,
+          minHeight: 0,
           display: 'flex',
           flexDirection: 'column',
-          height: '100vh',
+          height: '100%',
           overflow: 'hidden',
           transition: isDesktopNav ? 'margin-left 200ms ease' : undefined,
         }}
       >
         <Box
           component="header"
-          style={{ borderBottom: '1px solid var(--mantine-color-default-border)' }}
+          style={{
+            flexShrink: 0,
+            borderBottom: '1px solid var(--mantine-color-default-border)',
+          }}
           bg="var(--mantine-color-body)"
         >
           <Box {...appContentShellProps} py="sm">
@@ -356,7 +360,18 @@ export function AppLayout() {
           )}
         </Box>
 
-        <Box component="main" {...appContentShellProps} py={{ base: 'md', sm: 'lg' }} style={{ flex: 1, overflow: 'auto' }}>
+        <Box
+          component="main"
+          {...appContentShellProps}
+          py={{ base: 'md', sm: 'lg' }}
+          style={{
+            flex: 1,
+            minHeight: 0,
+            overflow: 'auto',
+            overscrollBehavior: 'contain',
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
           {!selectedPeriod ? (
             <Alert color="yellow" title="Create your first period">
               Click &quot;New month&quot; above to add a reporting month before entering transactions.
