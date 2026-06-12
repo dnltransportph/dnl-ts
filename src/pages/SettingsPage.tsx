@@ -151,6 +151,30 @@ function MasterSection({
   )
 }
 
+interface CustomerPresetGroup {
+  customer_id: string
+  customer_name: string
+  presets: CustomerDeliverySite[]
+}
+
+function groupPresetsForDisplay(presets: CustomerDeliverySite[]): CustomerPresetGroup[] {
+  const byCustomer = new Map<string, CustomerDeliverySite[]>()
+
+  for (const preset of presets) {
+    const group = byCustomer.get(preset.customer_id) ?? []
+    group.push(preset)
+    byCustomer.set(preset.customer_id, group)
+  }
+
+  return [...byCustomer.values()]
+    .map((group) => ({
+      customer_id: group[0].customer_id,
+      customer_name: group[0].customer_name,
+      presets: [...group].sort((a, b) => a.delivery_site.localeCompare(b.delivery_site)),
+    }))
+    .sort((a, b) => a.customer_name.localeCompare(b.customer_name))
+}
+
 interface CustomerDeliverySitesSectionProps {
   customers: { id: string; name: string }[]
   presets: CustomerDeliverySite[]
@@ -175,15 +199,7 @@ function CustomerDeliverySitesSection({
     [customers],
   )
 
-  const sortedPresets = useMemo(
-    () =>
-      [...presets].sort(
-        (a, b) =>
-          a.customer_name.localeCompare(b.customer_name) ||
-          a.delivery_site.localeCompare(b.delivery_site),
-      ),
-    [presets],
-  )
+  const groupedPresets = useMemo(() => groupPresetsForDisplay(presets), [presets])
 
   const invalidate = async () => {
     await queryClient.invalidateQueries({ queryKey: ['customer_delivery_sites'] })
@@ -346,36 +362,36 @@ function CustomerDeliverySitesSection({
             Loading…
           </Text>
         )}
-        {!loading && sortedPresets.length === 0 && (
+        {!loading && groupedPresets.length === 0 && (
           <Text px="sm" py="md" size="sm" c="dimmed">
             No presets yet.
           </Text>
         )}
-        {sortedPresets.map((preset, index) => (
-          <Group
-            key={preset.id}
-            justify="space-between"
-            align="flex-start"
+        {groupedPresets.map((group, index) => (
+          <Stack
+            key={group.customer_id}
+            gap={2}
             px="sm"
-            py="xs"
-            wrap="nowrap"
+            py={6}
             style={{
               borderTop: index > 0 ? '1px solid var(--mantine-color-default-border)' : undefined,
             }}
           >
-            <Stack gap={2} style={{ minWidth: 0 }}>
-              <Text size="sm" fw={500}>
-                {preset.customer_name}
-              </Text>
-              <Text size="sm" c="dimmed">
-                {preset.delivery_site} · {preset.trips} trip{preset.trips === 1 ? '' : 's'} ·{' '}
-                {formatCurrency(preset.amount)}
-              </Text>
-            </Stack>
-            <Button variant="ghost" size="sm" onClick={() => handleDelete(preset)}>
-              Remove
-            </Button>
-          </Group>
+            <Text size="sm" fw={600} lh={1.3}>
+              {group.customer_name}
+            </Text>
+            {group.presets.map((preset) => (
+              <Group key={preset.id} justify="space-between" align="center" wrap="nowrap" gap="xs">
+                <Text size="sm" c="dimmed" lh={1.3} style={{ minWidth: 0 }}>
+                  {preset.delivery_site} · {preset.trips} trip{preset.trips === 1 ? '' : 's'} ·{' '}
+                  {formatCurrency(preset.amount)}
+                </Text>
+                <Button variant="ghost" size="sm" onClick={() => handleDelete(preset)}>
+                  Remove
+                </Button>
+              </Group>
+            ))}
+          </Stack>
         ))}
       </Paper>
     </Paper>
