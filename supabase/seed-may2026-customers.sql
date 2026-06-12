@@ -1,0 +1,5 @@
+-- DNL P&L — Seed May 2026 customers only
+-- Prefer: seed-may2026-master-data.sql (customers + suppliers + employees)
+--
+-- If you only need customers, run seed-may2026-master-data.sql anyway — it is safe
+-- (on conflict do nothing) and only adds missing rows.

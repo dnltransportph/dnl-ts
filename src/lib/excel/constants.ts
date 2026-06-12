@@ -1,0 +1,15 @@
+export const SHEET_NAMES = {
+  PL_SUMMARY: 'P&L SUMMARY',
+  PURCHASES: 'PURCHASES AND EXPENSES',
+  SALES: 'SALES',
+  SALARY: 'SALARY EXPENSES',
+  TOLL: 'TOLL FEE REFUND',
+  DIESEL: 'DIESEL EXPENSES',
+} as const
+
+export const COST_CENTER_CODES = new Set(['HOUSEHOLD', 'DNL', 'GARAGE', 'PALENGKE'])
+
+export const HEADER_ROW = 5
+export const DATA_START_ROW = 6
+export const SALARY_DATA_START_ROW = 7
+export const TOLL_DATA_START_ROW = 8

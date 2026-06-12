@@ -1,0 +1,22 @@
+html {
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background-color: var(--mantine-color-body);
+  color: var(--mantine-color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* CRM-style chart grid lines */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: light-dark(#f0f0f0, var(--mantine-color-dark-4));
+}
+
+.recharts-text {
+  fill: light-dark(#636e72, var(--mantine-color-dark-2));
+  font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+}
