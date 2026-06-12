@@ -133,14 +133,24 @@ function MasterSection({
             <Group
               key={item.id}
               justify="space-between"
+              align="flex-start"
+              wrap="nowrap"
+              gap="xs"
               px="sm"
               py="xs"
               style={{
                 borderTop: index > 0 ? '1px solid var(--mantine-color-default-border)' : undefined,
               }}
             >
-              <Text size="sm">{label}</Text>
-              <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id, label)}>
+              <Text size="sm" style={{ flex: 1, minWidth: 0 }}>
+                {label}
+              </Text>
+              <Button
+                variant="ghost"
+                size="sm"
+                style={{ flexShrink: 0 }}
+                onClick={() => handleDelete(item.id, label)}
+              >
                 Remove
               </Button>
             </Group>
@@ -381,12 +391,17 @@ function CustomerDeliverySitesSection({
               {group.customer_name}
             </Text>
             {group.presets.map((preset) => (
-              <Group key={preset.id} justify="space-between" align="center" wrap="nowrap" gap="xs">
-                <Text size="sm" c="dimmed" lh={1.3} style={{ minWidth: 0 }}>
+              <Group key={preset.id} justify="space-between" align="flex-start" wrap="nowrap" gap="xs">
+                <Text size="sm" c="dimmed" lh={1.3} style={{ flex: 1, minWidth: 0 }}>
                   {preset.delivery_site} · {preset.trips} trip{preset.trips === 1 ? '' : 's'} ·{' '}
                   {formatCurrency(preset.amount)}
                 </Text>
-                <Button variant="ghost" size="sm" onClick={() => handleDelete(preset)}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  style={{ flexShrink: 0 }}
+                  onClick={() => handleDelete(preset)}
+                >
                   Remove
                 </Button>
               </Group>
