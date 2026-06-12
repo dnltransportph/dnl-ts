@@ -8,6 +8,11 @@ export function formatCurrency(value: number): string {
   }).format(value)
 }
 
+/** Expense display with a leading minus; one string avoids sign/value wrapping in narrow cells. */
+export function formatExpenseCurrency(value: number): string {
+  return `−${formatCurrency(value)}`
+}
+
 export function formatPercent(value: number): string {
   return new Intl.NumberFormat('en-PH', {
     style: 'percent',
