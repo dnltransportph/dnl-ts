@@ -2,7 +2,9 @@ export interface FilterableColumn {
   key: string
   label: string
   inputType?: 'text' | 'number' | 'date' | 'select' | 'combobox'
-  selectOptions?: { value: string; label: string }[]
+  selectOptions?:
+    | { value: string; label: string }[]
+    | ((form: Record<string, string>) => { value: string; label: string }[])
 }
 
 export interface TableFilterState {

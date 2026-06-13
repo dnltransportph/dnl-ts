@@ -34,6 +34,28 @@ export function allDeliverySiteOptions(presets: CustomerDeliverySite[]): string[
   return [...sites].sort((a, b) => a.localeCompare(b))
 }
 
+export function formatCustomerDeliverySite(preset: CustomerDeliverySite): string {
+  return `${preset.customer_name} — ${preset.delivery_site}`
+}
+
+export function customerDeliverySiteSelectOptions(
+  presets: CustomerDeliverySite[],
+): { value: string; label: string }[] {
+  return [...presets]
+    .sort((a, b) => {
+      const byCustomer = a.customer_name.localeCompare(b.customer_name)
+      return byCustomer !== 0 ? byCustomer : a.delivery_site.localeCompare(b.delivery_site)
+    })
+    .map((preset) => {
+      const label = formatCustomerDeliverySite(preset)
+      return { value: label, label }
+    })
+}
+
+export function customerDeliverySiteComboboxOptions(presets: CustomerDeliverySite[]): string[] {
+  return customerDeliverySiteSelectOptions(presets).map((option) => option.label)
+}
+
 export function findPresetForDeliverySite(
   presets: CustomerDeliverySite[],
   customerName: string,

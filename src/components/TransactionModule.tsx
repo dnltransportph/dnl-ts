@@ -34,7 +34,7 @@ export interface ColumnDef<T> {
   label: string
   render?: (row: T) => ReactNode
   inputType?: 'text' | 'number' | 'date' | 'select' | 'combobox'
-  selectOptions?: { value: string; label: string }[]
+  selectOptions?: { value: string; label: string }[] | ((form: Record<string, string>) => { value: string; label: string }[])
   comboboxOptions?: (form: Record<string, string>) => string[]
   required?: boolean
   align?: 'left' | 'right' | 'center'
@@ -198,10 +198,12 @@ export function TransactionModule<T extends { id: string; amount: number; date: 
 
     if (col.inputType === 'select' && col.selectOptions) {
       const currentValue = form[col.key] ?? ''
+      const baseOptions =
+        typeof col.selectOptions === 'function' ? col.selectOptions(form) : col.selectOptions
       const options =
-        currentValue && !col.selectOptions.some((option) => option.value === currentValue)
-          ? [...col.selectOptions, { value: currentValue, label: currentValue }]
-          : col.selectOptions
+        currentValue && !baseOptions.some((option) => option.value === currentValue)
+          ? [...baseOptions, { value: currentValue, label: currentValue }]
+          : baseOptions
 
       return (
         <Select

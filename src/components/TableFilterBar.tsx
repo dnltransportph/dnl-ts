@@ -24,7 +24,9 @@ export function TableFilterBar({
   filteredCount,
   totalCount,
 }: TableFilterBarProps) {
-  const selectColumns = columns.filter((col) => col.inputType === 'select' && col.selectOptions)
+  const selectColumns = columns.filter(
+    (col) => col.inputType === 'select' && col.selectOptions && Array.isArray(col.selectOptions),
+  )
   const active = hasActiveTableFilters(filters)
 
   return (
@@ -50,20 +52,24 @@ export function TableFilterBar({
           size="sm"
         />
 
-        {selectColumns.map((col) => (
-          <NativeSelect
-            key={col.key}
-            label={col.label}
-            value={filters.selects[col.key] ?? ''}
-            onChange={(e) => onSelectChange(col.key, e.target.value)}
-            data={[
-              { value: '', label: `All ${col.label.toLowerCase()}` },
-              ...(col.selectOptions ?? []),
-            ]}
-            size="sm"
-            style={{ minWidth: '10rem' }}
-          />
-        ))}
+        {selectColumns.map((col) => {
+          const options = Array.isArray(col.selectOptions) ? col.selectOptions : []
+
+          return (
+            <NativeSelect
+              key={col.key}
+              label={col.label}
+              value={filters.selects[col.key] ?? ''}
+              onChange={(e) => onSelectChange(col.key, e.target.value)}
+              data={[
+                { value: '', label: `All ${col.label.toLowerCase()}` },
+                ...options,
+              ]}
+              size="sm"
+              style={{ minWidth: '10rem' }}
+            />
+          )
+        })}
 
         {active && (
           <Button variant="secondary" size="sm" onClick={onClear}>
