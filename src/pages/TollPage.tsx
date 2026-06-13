@@ -1,28 +1,44 @@
 import { TransactionModule, baseValidators } from '@/components/TransactionModule'
 import { useMasterData } from '@/hooks/useMasterData'
+import { allDeliverySiteOptions } from '@/lib/salesPresets'
 import type { TollFeeRefund } from '@/types/database'
 import { normalizePlate } from '@/lib/validation'
+import { useMemo } from 'react'
 
 export function TollPage() {
-  const { plateOptions } = useMasterData()
+  const { plateOptions, customerDeliverySites } = useMasterData()
+  const presets = customerDeliverySites.data ?? []
 
-  const columns = [
-    { key: 'date' as const, label: 'Date', inputType: 'date' as const, required: true },
-    {
-      key: 'plate_code' as const,
-      label: 'Plate No.',
-      inputType: 'select' as const,
-      selectOptions: plateOptions,
-    },
-    { key: 'delivery_site' as const, label: 'Delivery Site' },
-    {
-      key: 'amount' as const,
-      label: 'Amount',
-      inputType: 'number' as const,
-      required: true,
-      align: 'right' as const,
-    },
-  ]
+  const deliverySiteSelectOptions = useMemo(() => {
+    const sites = allDeliverySiteOptions(presets)
+    return [{ value: '', label: '—' }, ...sites.map((site) => ({ value: site, label: site }))]
+  }, [presets])
+
+  const columns = useMemo(
+    () => [
+      { key: 'date' as const, label: 'Date', inputType: 'date' as const, required: true },
+      {
+        key: 'plate_code' as const,
+        label: 'Plate No.',
+        inputType: 'select' as const,
+        selectOptions: plateOptions,
+      },
+      {
+        key: 'delivery_site' as const,
+        label: 'Delivery Site',
+        inputType: 'select' as const,
+        selectOptions: deliverySiteSelectOptions,
+      },
+      {
+        key: 'amount' as const,
+        label: 'Amount',
+        inputType: 'number' as const,
+        required: true,
+        align: 'right' as const,
+      },
+    ],
+    [plateOptions, deliverySiteSelectOptions],
+  )
 
   return (
     <TransactionModule<TollFeeRefund>

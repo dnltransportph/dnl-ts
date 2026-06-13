@@ -197,12 +197,18 @@ export function TransactionModule<T extends { id: string; amount: number; date: 
     }
 
     if (col.inputType === 'select' && col.selectOptions) {
+      const currentValue = form[col.key] ?? ''
+      const options =
+        currentValue && !col.selectOptions.some((option) => option.value === currentValue)
+          ? [...col.selectOptions, { value: currentValue, label: currentValue }]
+          : col.selectOptions
+
       return (
         <Select
           label={label}
-          value={form[col.key] ?? ''}
+          value={currentValue}
           onChange={(e) => applyFieldChange(col.key, e.target.value)}
-          options={col.selectOptions}
+          options={options}
           disabled={readOnly}
         />
       )

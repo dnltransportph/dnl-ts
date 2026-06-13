@@ -23,6 +23,17 @@ export function deliverySiteOptionsForCustomer(
   return deliverySitesForCustomer(presets, customerName).map((preset) => preset.delivery_site)
 }
 
+export function allDeliverySiteOptions(presets: CustomerDeliverySite[]): string[] {
+  const sites = new Set<string>()
+
+  for (const preset of presets) {
+    const site = preset.delivery_site.trim()
+    if (site) sites.add(site)
+  }
+
+  return [...sites].sort((a, b) => a.localeCompare(b))
+}
+
 export function findPresetForDeliverySite(
   presets: CustomerDeliverySite[],
   customerName: string,
